@@ -37,6 +37,7 @@ with st.form('Please provide the inputs'):
 # Check if the selected date and time are valid
 selected_datetime = datetime.datetime.combine(selected_date, selected_time)
 if submit_button and selected_datetime > now:
+    selected_datetime = datetime.datetime.combine(selected_date, selected_time)
     st.success("All is set")
     st.write("Selected Date and Time:", selected_datetime)
 
@@ -64,7 +65,7 @@ if submit_button and selected_datetime > now:
     stations['result'] = stations['ratio'].apply(lambda x: 1 if x > 1 else 0)
 
 
-    st.header("These are divvy stations' availability on the selected date")
+    st.header("Here is bikes availability per station on the selected date and time")
 
 
 
