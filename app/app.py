@@ -18,8 +18,6 @@ st.title("THIS WEB APP PREDICTS THE AVAILABILITY OF DIVVY BIKES UP TO FIVE DAYS 
 
 #st.header("Select the date and time  to explore Divvy's stations traffic")
 
-import streamlit as st
-import datetime
 
 # Title of the app
 st.title("Select a Date and Time to predict bikes availability per station")
@@ -39,7 +37,7 @@ with st.form('Please provide the inputs'):
     if submit_button and selected_datetime > now:
         selected_datetime_bis = datetime.datetime.combine(selected_date, selected_time)
         st.success("All is set")
-        st.write("Selected Date and Time:", selected_datetime_bis)
+        st.write("Selected Date and Time:", f"{selected_date}","at", f"{selected_time}")
 
         # Create a dictionary with year, month, day, hour, minute, and second as keys
         datetime_dict = dict(
