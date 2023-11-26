@@ -34,62 +34,62 @@ with st.form('Please provide the inputs'):
     selected_time = st.time_input('Select a time', value=now.time())
     submit_button = st.form_submit_button("Submit")
 
-# Check if the selected date and time are valid
-selected_datetime = datetime.datetime.combine(selected_date, selected_time)
-if submit_button and selected_datetime > now:
-    selected_datetime_bis = datetime.datetime.combine(selected_date, selected_time)
-    st.success("All is set")
-    st.write("Selected Date and Time:", selected_datetime_bis)
+    # Check if the selected date and time are valid
+    selected_datetime = datetime.datetime.combine(selected_date, selected_time)
+    if submit_button and selected_datetime > now:
+        selected_datetime_bis = datetime.datetime.combine(selected_date, selected_time)
+        st.success("All is set")
+        st.write("Selected Date and Time:", selected_datetime_bis)
 
-    # Create a dictionary with year, month, day, hour, minute, and second as keys
-    datetime_dict = dict(
-    year_input= int(selected_datetime.year),
-    month_input= int(selected_datetime.month),
-    day_input= int(selected_datetime.day),
-    hour_input= int(selected_datetime.hour),
-    min_input= int(selected_datetime.minute),
-    sec_input = int(selected_datetime.second)
-    )
+        # Create a dictionary with year, month, day, hour, minute, and second as keys
+        datetime_dict = dict(
+        year_input= int(selected_datetime.year),
+        month_input= int(selected_datetime.month),
+        day_input= int(selected_datetime.day),
+        hour_input= int(selected_datetime.hour),
+        min_input= int(selected_datetime.minute),
+        sec_input = int(selected_datetime.second)
+        )
 
-    #Executing the API
-    url='https://deparrpred-z2pwa4emra-ew.a.run.app/predict'
-    params=datetime_dict
+        #Executing the API
+        url='https://deparrpred-z2pwa4emra-ew.a.run.app/predict'
+        params=datetime_dict
 
-    response=requests.get(url=url, params=params)
-    outcome=response.json()
+        response=requests.get(url=url, params=params)
+        outcome=response.json()
 
-    stations = pd.DataFrame.from_dict(outcome)
-
-
-    stations['ratio'] = stations['nb_dep']/stations['nb_arr']
-    stations['result'] = stations['ratio'].apply(lambda x: 1 if x > 1 else 0)
+        stations = pd.DataFrame.from_dict(outcome)
 
 
-    st.header("Here is bikes availability per station on the selected date and time")
+        stations['ratio'] = stations['nb_dep']/stations['nb_arr']
+        stations['result'] = stations['ratio'].apply(lambda x: 1 if x > 1 else 0)
+
+
+        st.header("Here is bikes availability per station on the selected date and time")
 
 
 
-    # Step 3: Load the dataframe with latitude, longitude, and dummy_value variables
-    # Replace 'df' with the name of your dataframe
+        # Step 3: Load the dataframe with latitude, longitude, and dummy_value variables
+        # Replace 'df' with the name of your dataframe
 
-    # Step 4: Create a map object
-    m = folium.Map(location=[stations['lat'].mean(), stations['lng'].mean()], zoom_start=12)
+        # Step 4: Create a map object
+        m = folium.Map(location=[stations['lat'].mean(), stations['lng'].mean()], zoom_start=12)
 
-    # Step 5: Create a MarkerCluster object
-    marker_cluster = MarkerCluster(disableClusteringAtZoom=1).add_to(m)
+        # Step 5: Create a MarkerCluster object
+        marker_cluster = MarkerCluster(disableClusteringAtZoom=1).add_to(m)
 
-    # Step 6: Add markers to the map
-    for index, row in stations.iterrows():
-        coord = (row['lat'], row['lng'])
-        color = 'red' if row['result'] == 1 else 'green'
-        label = f'<div style="font-size: 14px;">{row["station_name"]}</div>'
-        folium.Marker(coord, icon=folium.Icon(color=color), popup=label).add_to(marker_cluster)
+        # Step 6: Add markers to the map
+        for index, row in stations.iterrows():
+            coord = (row['lat'], row['lng'])
+            color = 'red' if row['result'] == 1 else 'green'
+            label = f'<div style="font-size: 14px;">{row["station_name"]}</div>'
+            folium.Marker(coord, icon=folium.Icon(color=color), popup=label).add_to(marker_cluster)
 
-    # Step 7: Fit the map bounds to show all markers
-    m.fit_bounds(marker_cluster.get_bounds())
+        # Step 7: Fit the map bounds to show all markers
+        m.fit_bounds(marker_cluster.get_bounds())
 
-    folium_static(m)
+        folium_static(m)
 
 
-elif submit_button and selected_datetime <= now:
-    st.error("Please select a date and time in the future")
+    elif submit_button and selected_datetime <= now:
+        st.error("Please select a date and time in the future")
