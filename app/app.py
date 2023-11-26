@@ -37,9 +37,9 @@ with st.form('Please provide the inputs'):
 # Check if the selected date and time are valid
 selected_datetime = datetime.datetime.combine(selected_date, selected_time)
 if submit_button and selected_datetime > now:
-    selected_datetime = datetime.datetime.combine(selected_date, selected_time)
+    selected_datetime_bis = datetime.datetime.combine(selected_date, selected_time)
     st.success("All is set")
-    st.write("Selected Date and Time:", selected_datetime)
+    st.write("Selected Date and Time:", selected_datetime_bis)
 
     # Create a dictionary with year, month, day, hour, minute, and second as keys
     datetime_dict = dict(
