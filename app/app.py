@@ -58,7 +58,7 @@ with st.form('Please provide the inputs'):
         stations['result'] = stations['ratio'].apply(lambda x: 1 if x > 1 else 0)
 
 
-        st.header("Here is bikes availability per station on the selected date and time")
+        st.header("Stations in green are those likely to have available bikes. Stations in red are those likely not to have any available bike")
 
 
         # Create a map object
